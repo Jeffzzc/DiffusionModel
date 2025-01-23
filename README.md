@@ -1,5 +1,4 @@
 ## DiffusionModel_Toy
-Some toy models
 
 ### Awesome Repositories
 
@@ -22,7 +21,6 @@ Some toy models
   - Mini Code: https://github.com/Alokia/diffusion-DDIM-pytorch
 
 #### Consistency Models
-##### Overview
 - [Overview](https://github.com/facebookresearch/flow_matching)
 
 - [Consistency Models](https://arxiv.org/abs/2303.01469)

@@ -52,7 +52,7 @@ class GaussianDiffusionTrainer(nn.Module):
         return loss
 
 class DDPMSampler(nn.Module):
-    def __init__(self, x_t, t):
+    def __init__(self, model: nn.Module, beta: Tuple[int, int], T: int):
         super().__init__()
         self.model = model
         self.T = T
@@ -134,7 +134,7 @@ class DDPMSampler(nn.Module):
         return torch.stack(x, dim=1)  # [batch_size, sample, channels, height, width]
 
 class DDIMSampler(nn.Module):
-    def __init__(self, x_t, t):
+    def __init__(self, model, beta: Tuple[int, int], T: int):
         super().__init__()
         self.model = model
         self.T = T
@@ -146,7 +146,7 @@ class DDIMSampler(nn.Module):
         注册为缓冲区的张量会随着模型保存和加载而被保留。
         缓冲区通常用于保存那些不需要梯度的状态信息（例如模型的一些常量或缓存），但它们又是模型的一部分，不能被丢弃。'''
         # calculate the cumulative product of $\alpha$ , named $\bar{\alpha_t}$ in paper
-        alpha_t = 1.0 - self.beta_t
+        alpha_t = 1.0 - beta_t
         self.register_buffer("alpha_t_bar", torch.cumprod(alpha_t, dim=0))
     
     @torch.no_grad()
@@ -159,7 +159,7 @@ class DDIMSampler(nn.Module):
         alpha_t_prev = extract(self.alpha_t_bar, prev_t, x_t.shape)
         
         # predict noise using model
-        epsilon_theta = self.model(x_t, t)
+        epsilon_theta_t = self.model(x_t, t)
         
         # calculate x_{t-1}
         sigma_t = eta * torch.sqrt((1 - alpha_t_prev) / (1 - alpha_t) * (1 - alpha_t / alpha_t_prev))
@@ -196,7 +196,7 @@ class DDIMSampler(nn.Module):
             a = self.T
             time_steps = np.asarray(list(range(0, self.T, a)))
         elif method == "quadratic":
-            time_steps = (np.linspace(0, np.sqrt(self.T * 0.8), steps) ** 2).astype(np.int)
+            time_steps = (np.linspace(0, np.sqrt(self.T * 0.8), steps) ** 2).astype(np.int64)
         else:
             raise NotImplementedError(f"sampling method {method} is not implemented!")
         

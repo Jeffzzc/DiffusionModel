@@ -61,6 +61,7 @@ if __name__ == '__main__':
 
     rf = RectifiedFlow()
 
-    x_t = rf.create_flow(torch.ones(2, 3, 4, 4), 0.999)
+    x_t = rf.create_flow(torch.ones(2, 3, 4, 4), torch.tensor(0.999).view(1, 1, 1, 1))
+
 
     print(x_t)

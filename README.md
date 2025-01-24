@@ -28,3 +28,8 @@
   - Mini Code: https://github.com/openai/consistency_models_cifar10
   - Mini Code: https://github.com/Kinyugo/consistency_models
   - Mini Code: https://github.com/junhsss/consistency-models
+
+#### Rectified Flow
+- [Rectified Flow](https://arxiv.org/pdf/2209.03003)
+  - Mini Code: https://github.com/TongTong313/rectified-flow
+  - My version: https://github.com/Jeffzzc/DiffusionModel_Toy/tree/main/rectified_flow
